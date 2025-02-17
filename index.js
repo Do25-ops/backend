@@ -16,11 +16,11 @@ app.use(cors({
     credentials: true, 
 }));
 
-const socket = require('./socket'); 
+// const socket = require('./socket'); 
 const PORT = process.env.PORT || 3000;
 
 
-const io = socket.init(server);
+// const io = socket.init(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -38,17 +38,17 @@ app.get('/api', (req, res) => {
 });
 
 
-io.on('connection', (socket) => {
+// io.on('connection', (socket) => {
     
   
-    socket.on('updateFileStatus', (email, newStatus) => {
-      console.log(`Team email: ${email}, New file Status: ${newStatus}`);
-      io.emit('statusUpdated', { email, newStatus });
-    });
+//     socket.on('updateFileStatus', (email, newStatus) => {
+//       console.log(`Team email: ${email}, New file Status: ${newStatus}`);
+//       io.emit('statusUpdated', { email, newStatus });
+//     });
   
-    socket.on('disconnect', () => {
-    });
-});
+//     socket.on('disconnect', () => {
+//     });
+// });
   
 server.listen(PORT, () => {
     console.log('connected at ',PORT);

@@ -250,12 +250,7 @@ GROUP BY q.queryId;
   }
 };
 
-function sendStatus(email, status, level = 0) {
-  const io = socket.getIO();
-  if (level == 0)
-    io.emit("fileStatusUpdated", { email: email, status: status });
-  else io.emit("levelUpdated", { email, level: level + 1 });
-}
+
 
 function deepEqual(queryId, b, selectedDialect) {
   // console.log(queryId, b, oracleTabularAnswers[queryId]);
@@ -319,38 +314,121 @@ function deepEqual(queryId, b, selectedDialect) {
 }
 
 
-function statusSender(email, id, team_id, query, answer,selectedDialect) {
+// function sendStatus(email, status, level = 0) {
+//   const io = socket.getIO();
+//   if (level == 0)
+//     io.emit("fileStatusUpdated", { email: email, status: status });
+//   else io.emit("levelUpdated", { email, level: level + 1 });
+// }
+
+module.exports.fetchStatus = (req, res) => {
+  const { team_id, query } = req.query;
+  try {
+      const q = `
+          SELECT status FROM solutions p
+          join participants p on s.team_id = p.team_id
+          WHERE team_id = ? AND query_id = ?
+          ORDER BY submitted_at DESC
+          LIMIT 1;
+      `;
+
+      db.query(q, [team_id, query], (err, result) => {
+          if (err) {
+              console.error("Database error:", err);
+              return res.status(500).json({ message: "Database error" });
+          }
+         const queryStatus = {
+             email : result[0].email,
+             status : result[0].status
+         }
+          res.status(200).json({ queryStatus : queryStatus});
+      });
+
+  } catch (err) {
+      console.error("Internal error:", err);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// function statusSender(email, id, team_id, query, answer,selectedDialect) {
+//   const delayTime = 1000;
+//   setTimeout(() => {
+//    // sendStatus(email, "submitted");
+//     const q1 = "update solutions set status = 'pending' where id = ?";
+//     db.query(q1, [id], (err2, result2) => {
+//       if (err2) {
+//         console.error("cannot update to pending");
+//       } else {
+//         setTimeout(() => {
+//         //  sendStatus(email, "pending");
+
+//           if (deepEqual(query.queryId, answer,selectedDialect)) {
+//             const acceptQuery = `update solutions set status = \'accepted\' where id = ${id}`;
+//             db.execute(acceptQuery);
+//           //  sendStatus(email, "accepted");
+
+//             const levelCount =
+//               "select count(*) as solved from solutions where status = 'accepted' and team_id = ?";
+//             db.query(levelCount, [team_id], (err3, result3) => {
+//               if (!err3 || result3.length > 0) {
+//                 const levels = Math.floor(result3[0].solved / 3);
+
+//                 if (levels > 0) {
+//                   sendStatus(email, "", levels);
+//                   console.log('setting level of team as ',levels+1,team_id)
+//                   const updateQuery = `
+//                     UPDATE participants 
+//                     SET level = ?, levelCrossedAt = NOW()
+//                     WHERE team_id = ?`;
+                  
+//                   db.execute(updateQuery, [levels + 1, team_id], (err4, result4) => {
+//                     if (err4) {
+//                       console.error("Error updating participant level:", err4);
+//                     }
+//                   });
+//                 }
+//               }
+//             });
+//           } else {
+//             const rejectQuery = `update solutions set status = \'rejected\' where id = ${id}`;
+//             db.execute(rejectQuery);
+//           //  sendStatus(email, "rejected");
+//           }
+//         }, delayTime);
+//       }
+//     });
+//   }, delayTime);
+// }
+
+function statusSender(email, id, team_id, query, answer, selectedDialect) {
   const delayTime = 1000;
+
   setTimeout(() => {
-    sendStatus(email, "submitted");
-    const q1 = "update solutions set status = 'pending' where id = ?";
-    db.query(q1, [id], (err2, result2) => {
+    const q1 = "UPDATE solutions SET status = 'pending' WHERE id = ?";
+    db.query(q1, [id], (err2) => {
       if (err2) {
-        console.error("cannot update to pending");
+        console.error("Cannot update to pending");
       } else {
         setTimeout(() => {
-          sendStatus(email, "pending");
-
-          if (deepEqual(query.queryId, answer,selectedDialect)) {
-            const acceptQuery = `update solutions set status = \'accepted\' where id = ${id}`;
-            db.execute(acceptQuery);
-            sendStatus(email, "accepted");
+          if (deepEqual(query.queryId, answer, selectedDialect)) {
+            const acceptQuery = `UPDATE solutions SET status = 'accepted' WHERE id = ?`;
+            db.query(acceptQuery, [id]);
 
             const levelCount =
-              "select count(*) as solved from solutions where status = 'accepted' and team_id = ?";
+              "SELECT COUNT(*) AS solved FROM solutions WHERE status = 'accepted' AND team_id = ?";
             db.query(levelCount, [team_id], (err3, result3) => {
-              if (!err3 || result3.length > 0) {
+              if (!err3 && result3.length > 0) {
                 const levels = Math.floor(result3[0].solved / 3);
 
                 if (levels > 0) {
-                  sendStatus(email, "", levels);
-                  console.log('setting level of team as ',levels+1,team_id)
+                  console.log("Setting level of team to", levels + 1, team_id);
                   const updateQuery = `
                     UPDATE participants 
                     SET level = ?, levelCrossedAt = NOW()
-                    WHERE team_id = ?`;
-                  
-                  db.execute(updateQuery, [levels + 1, team_id], (err4, result4) => {
+                    WHERE team_id = ?
+                  `;
+                  db.query(updateQuery, [levels + 1, team_id], (err4) => {
                     if (err4) {
                       console.error("Error updating participant level:", err4);
                     }
@@ -359,15 +437,15 @@ function statusSender(email, id, team_id, query, answer,selectedDialect) {
               }
             });
           } else {
-            const rejectQuery = `update solutions set status = \'rejected\' where id = ${id}`;
-            db.execute(rejectQuery);
-            sendStatus(email, "rejected");
+            const rejectQuery = `UPDATE solutions SET status = 'rejected' WHERE id = ?`;
+            db.query(rejectQuery, [id]);
           }
         }, delayTime);
       }
     });
   }, delayTime);
 }
+
 
 module.exports.submitQuery = (req, res) => {
   const { email, team_id, query, answer,selectedDialect} = req.body;
