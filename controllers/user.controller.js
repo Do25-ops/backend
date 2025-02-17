@@ -7,7 +7,7 @@ require('dotenv').config();
 module.exports.loginUser = (req, res) => {
     
     try{
-        const q = 'SELECT * FROM Participants WHERE email = ?';
+        const q = 'SELECT * FROM participants WHERE email = ?';
 
         db.query(q, [req.body.email], (err, data) => {
             if (err) return res.status(500).json({message : err.message});
@@ -66,7 +66,7 @@ module.exports.registerUser = (req,res) => {
     try{
         const {email,password,username} = req.body; 
         
-        const q = 'SELECT * FROM Participants WHERE email = ?';   
+        const q = 'SELECT * FROM participants WHERE email = ?';   
         db.query(q, [email], (err, data) => {
             if (err) return res.status(500).json({message : err.message});
             if (data.length) return res.status(409).json({message : "A participant with this email already exists"});
@@ -74,7 +74,7 @@ module.exports.registerUser = (req,res) => {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(password, salt);
             
-            const qInsert = "INSERT INTO Participants (teamName,email,password) VALUES (?,?,?)";
+            const qInsert = "INSERT INTO participants (teamName,email,password) VALUES (?,?,?)";
             const values = [username,email, hash];
             
             db.query(qInsert, values, (err, data) => {
@@ -104,7 +104,7 @@ module.exports.retrieveCookie = (req, res) => {
             return res.status(403).json({ message: 'Token expired or invalid' });
         }
         
-        const account_query = 'SELECT * FROM Participants WHERE email = ?';
+        const account_query = 'SELECT * FROM participants WHERE email = ?';
         
         db.query(account_query, [decoded.id], (err, result) => {
             if (err || result.length == 0) {
