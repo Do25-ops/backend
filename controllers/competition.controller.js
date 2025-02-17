@@ -334,8 +334,7 @@ module.exports.fetchStatus = (req, res) => {
 
       db.query(q, [team_id, query], (err, result) => {
           if (err) {
-              console.error("Database error:", err);
-              return res.status(500).json({ message: "Database error" });
+              return res.status(500).json({ message: "Database error" ,team_id,query, error : err });
           }
          const queryStatus = {
              email : result[0].email,
