@@ -5,7 +5,6 @@ require('dotenv').config();
 module.exports.updateTimings = (req, res) => {
     console.log('update hit ' ,req.body);
     const { competitionName, competitionDate, startTime, endTime,secretKey } = req.body;
-    const io = socket.getIO();
     if(secretKey !== process.env.secret_key_manage) {
         return res.status(200).json({ success: false, message: "You do not have the rights to perform this update"});
     }
