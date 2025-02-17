@@ -7,5 +7,5 @@ router.post('/register',registerUser);
 router.get('/logout',logoutUser);
 router.get('/check-session',retrieveCookie);
 router.get('/getMyDashboard/:id',getDashboard);
-router.put('/tutoiralDone',markTutorialDone);
+router.post('/tutorialDone',markTutorialDone);
 module.exports = router;
