@@ -397,7 +397,7 @@ module.exports.sendLeaderboardData = (req, res) => {
     `;
     db.query(q, [], async (err, result1) => {
       if (err || result1.length === 0) {
-        return res.status(400).json({ message: "Something went wrong" });
+        return res.status(400).json({ message: "Something went wrong in fetching leaderboard dataa ",error : err });
       }
 
       try {

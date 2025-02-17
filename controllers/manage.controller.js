@@ -41,7 +41,7 @@ module.exports.getCompetitionTimings = (req, res) => {
     db.query(q, (err, result) => {
         if (err) {
             console.error("Error fetching competition timings:", err);
-            return res.status(500).json({ error: "Internal Server Error" });
+            return res.status(500).json({ error: "Internal Server Error in fetching competition timingss ",err  });
         }
 
         if (result.length === 0) {
