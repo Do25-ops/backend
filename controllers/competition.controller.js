@@ -218,8 +218,7 @@ const tabularAnswers = {
 module.exports.sendQueries = (req, res) => {
   try {
     const [level, team_id] = req.params.id.split(".");
-    console.log('feyching queries ',level,team_id);
-    const q = `USE data_dungeon;
+    const q = `
            SELECT q.*, 
        MAX(CASE 
                WHEN s.queryId IS NOT NULL AND s.status = 'accepted' THEN 1 
@@ -235,7 +234,7 @@ GROUP BY q.queryId;
     db.query(q, [team_id, level], (err, result) => {
    //   console.log(result);
       if (err || result.length === 0) {
-        return res.status(200).json([]);
+        return res.status(200).json({message : `${team_id} team ${level} No queries were found `,queries: []});
       }
       res.status(200).json({
         message: "Queries found successfully",
