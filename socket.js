@@ -4,7 +4,7 @@ module.exports = {
   init: (server) => {
     io = require('socket.io')(server, {
       cors: {
-        origin: ['https://frontend-one-gamma-23.vercel.app'],  
+        origin: "https://frontend-one-gamma-23.vercel.app",
         methods: ["GET", "POST"],
         credentials: true,  
       },
