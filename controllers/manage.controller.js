@@ -36,7 +36,7 @@ module.exports.updateTimings = (req, res) => {
 
 module.exports.getCompetitionTimings = (req, res) => {
     const q = `SELECT competitionName,competitionDate,
-    startTime,endTime FROM competition WHERE competition_id = 1;`;
+    startTime,endTime FROM Competition WHERE competition_id = 1;`;
 
     db.query(q, (err, result) => {
         if (err) {
