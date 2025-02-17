@@ -1,5 +1,4 @@
 const { db } = require("../db");
-const socket = require("../socket");
 
 // This data would be use to compare rows if tabular results dosen't match exactly, possibly due to change in headers
 const answers = {

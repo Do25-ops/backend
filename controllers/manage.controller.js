@@ -1,5 +1,4 @@
 const { db } = require("../db");
-const socket = require("../socket");
 require('dotenv').config();
 
 
@@ -8,7 +7,7 @@ module.exports.updateTimings = (req, res) => {
     const { competitionName, competitionDate, startTime, endTime,secretKey } = req.body;
     const io = socket.getIO();
     if(secretKey !== process.env.secret_key_manage) {
-        return res.status(200).json({ success: false, message: "You do not have the rights to do this update"});
+        return res.status(200).json({ success: false, message: "You do not have the rights to perform this update"});
     }
     const q = `
         UPDATE Competition 
@@ -21,14 +20,6 @@ module.exports.updateTimings = (req, res) => {
             console.error("Error updating competition timings:", error);
             return res.status(500).json({ success: false, message: "Database update failed", error });
         }
-
-        io.emit("competitionTimingsUpdated", {
-            competitionName,
-            competitionDate,
-            startTime,
-            endTime
-        });
-
         res.status(200).json({ success: true, message: "Competition timings updated successfully" });
     });
 };
