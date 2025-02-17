@@ -323,29 +323,39 @@ function deepEqual(queryId, b, selectedDialect) {
 
 module.exports.fetchStatus = (req, res) => {
   const { team_id, query } = req.query;
+
+  if (!team_id || !query) {
+    return res.status(400).json({ message: "Missing parameters" });
+  }
+
   try {
-      const q = `
-          SELECT p.email,s.status FROM solutions s
-          join participants p on s.team_id = p.team_id
-          WHERE s.team_id = ? AND s.queryId = ?
-          ORDER BY s.submitted_at DESC
-          LIMIT 1;
-      `;
+    const q = `
+        SELECT p.email, s.status FROM solutions s
+        JOIN participants p ON s.team_id = p.team_id
+        WHERE s.team_id = ? AND s.queryId = ?
+        ORDER BY s.submitted_at DESC
+        LIMIT 1;
+    `;
 
-      db.query(q, [team_id, query.queryId], (err, result) => {
-          if (err) {
-              return res.status(500).json({ message: "Database error" ,team_id,query, error : err });
-          }
-         const queryStatus = {
-             email : result[0].email,
-             status : result[0].status
-         }
-          res.status(200).json({ queryStatus : queryStatus});
+    db.query(q, [team_id, query], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "No status found" });
+      }
+
+      res.status(200).json({
+        queryStatus: {
+          email: result[0].email,
+          status: result[0].status,
+        },
       });
-
+    });
   } catch (err) {
-      console.error("Internal error:", err);
-      res.status(500).json({ message: "Internal server error" ,error : err });
+    console.error("Internal error:", err);
+    res.status(500).json({ message: "Internal server error", error: err });
   }
 };
 
