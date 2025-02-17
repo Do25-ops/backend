@@ -325,10 +325,10 @@ module.exports.fetchStatus = (req, res) => {
   const { team_id, query } = req.query;
   try {
       const q = `
-          SELECT status FROM solutions s
+          SELECT p.email,s.status FROM solutions s
           join participants p on s.team_id = p.team_id
-          WHERE team_id = ? AND query_id = ?
-          ORDER BY submitted_at DESC
+          WHERE s.team_id = ? AND s.queryId = ?
+          ORDER BY s.submitted_at DESC
           LIMIT 1;
       `;
 
