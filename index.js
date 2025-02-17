@@ -6,12 +6,20 @@ const competitionRoutes = require('./routes/competition.routes');
 const manageRoutes = require('./routes/manage.routes');
 const cookieParser = require("cookie-parser");
 const http = require('http');
+
+const app = express();
+const server = http.createServer(app);
+
+
+app.use(cors({
+    origin: ['https://frontend-one-gamma-23.vercel.app'], 
+    credentials: true,  // Allow cookies and authentication headers
+}));
+
 const socket = require('./socket'); 
 const PORT = process.env.PORT || 3000;
 
 
-const app = express();
-const server = http.createServer(app);
 const io = socket.init(server);
 
 app.use(express.json());
@@ -20,10 +28,6 @@ app.use(cookieParser());
 
 // app.use(authentication);
 
-app.use(cors({
-    origin: ['https://frontend-one-gamma-23.vercel.app'], 
-    credentials: true,  // Allow cookies and authentication headers
-}));
 
 app.use('/api',userRoutes);
 app.use('/api',competitionRoutes);
