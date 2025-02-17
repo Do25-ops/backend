@@ -12,13 +12,4 @@
       "dest": "index.js"
     }
   ],
-  "env": {
-    "JWT_SECRET": "@jwt_secret",
-    "DB_HOST": "@db_host",
-    "DB_USER": "@db_user",
-    "DB_PASSWORD": "@db_password",
-    "DB_NAME": "@db_name",
-    "PORT": "@port",
-    "secret_key_manage": "@secret_key_manage"
-  }
 }
