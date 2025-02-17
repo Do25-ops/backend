@@ -325,7 +325,7 @@ module.exports.fetchStatus = (req, res) => {
   const { team_id, query } = req.query;
   try {
       const q = `
-          SELECT status FROM solutions p
+          SELECT status FROM solutions s
           join participants p on s.team_id = p.team_id
           WHERE team_id = ? AND query_id = ?
           ORDER BY submitted_at DESC
@@ -346,7 +346,7 @@ module.exports.fetchStatus = (req, res) => {
 
   } catch (err) {
       console.error("Internal error:", err);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error" ,error : err });
   }
 };
 
