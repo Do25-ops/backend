@@ -337,7 +337,7 @@ module.exports.fetchStatus = (req, res) => {
         LIMIT 1;
     `;
 
-    db.query(q, [team_id, query], (err, result) => {
+    db.query(q, [team_id, query.queryId], (err, result) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
       }
