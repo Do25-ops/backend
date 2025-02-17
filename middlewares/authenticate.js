@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const unprotectedRoutes = ['login', 'register', 'check-session','getCompetitionTimings','updateTimings','leaderboardData'];
 
 const isAuthenticated = (req, res, next) => {
-    if (unprotectedRoutes.includes(req.path.split('/')[1])) {
+    // if (unprotectedRoutes.includes(req.path.split('/')[1])) {
+    if (unprotectedRoutes.includes(req.path.split('/')[2])) {
         return next();
     }
     try {   
