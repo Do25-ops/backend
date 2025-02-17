@@ -392,7 +392,7 @@ module.exports.sendLeaderboardData = (req, res) => {
     const q = `
     SELECT p.*,count(s.id) as num_submissions 
     FROM participants p
-    join solutions s on s.team_id = p.team_id
+    left join solutions s on s.team_id = p.team_id
     group by p.team_id
     `;
     db.query(q, [], async (err, result1) => {
