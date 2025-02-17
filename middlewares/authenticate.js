@@ -3,14 +3,17 @@ const unprotectedRoutes = ['login', 'register', 'check-session','getCompetitionT
 
 const isAuthenticated = (req, res, next) => {
     // if (unprotectedRoutes.includes(req.path.split('/')[1])) {
-    if (unprotectedRoutes.includes(req.path.split('/')[2])) {
+    const lastPathSegment = req.path.split('/').pop(); 
+    if (unprotectedRoutes.includes(lastPathSegment)) {
         return next();
     }
     try {   
         const token = req.cookies?.access_token
                 
         if (!token) {
-            return res.status(401).json({ message: 'Authentication failed' });
+            return res.status(401).json({ message: `
+                last path : ${lastPathSegment, 'path' , req.path}
+                Authentication failed` });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET); // Ensure JWT_SECRET is set in .env        

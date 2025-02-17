@@ -29,7 +29,7 @@ app.use('/api',userRoutes);
 app.use('/api',competitionRoutes);
 app.use('/api',manageRoutes);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('Hunt Data with data dungeon!');
 });
 
