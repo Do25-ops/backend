@@ -18,12 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(cookieParser());
 
-app.use(authentication);
+// app.use(authentication);
 
 app.use(cors({
-    origin: ['https://frontend-one-gamma-23.vercel.app/'], 
-    credentials: true,
-  }));
+    origin: ['https://frontend-one-gamma-23.vercel.app'],  // No trailing slash
+    credentials: true,  // Allow cookies and authentication headers
+}));
 
 app.use('/api',userRoutes);
 app.use('/api',competitionRoutes);
