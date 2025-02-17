@@ -21,7 +21,7 @@ app.use(cookieParser());
 // app.use(authentication);
 
 app.use(cors({
-    origin: ['https://frontend-one-gamma-23.vercel.app'],  // No trailing slash
+    origin: ['https://frontend-one-gamma-23.vercel.app'], 
     credentials: true,  // Allow cookies and authentication headers
 }));
 

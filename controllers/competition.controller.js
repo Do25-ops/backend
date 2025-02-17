@@ -219,7 +219,7 @@ module.exports.sendQueries = (req, res) => {
   try {
     const [level, team_id] = req.params.id.split(".");
     console.log('feyching queries ',level,team_id);
-    const q = `
+    const q = `USE data_dungeon;
            SELECT q.*, 
        MAX(CASE 
                WHEN s.queryId IS NOT NULL AND s.status = 'accepted' THEN 1 
