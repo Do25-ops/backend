@@ -25,9 +25,9 @@ app.use(cors({
     credentials: true,
   }));
 
-app.use('/',userRoutes);
-app.use('/',competitionRoutes);
-app.use('/',manageRoutes);
+app.use('/api',userRoutes);
+app.use('/api',competitionRoutes);
+app.use('/api',manageRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hunt Data with data dungeon!');
