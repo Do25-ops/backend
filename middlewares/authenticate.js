@@ -3,7 +3,7 @@ const unprotectedRoutes = ['login', 'register', 'check-session','getCompetitionT
 
 const isAuthenticated = (req, res, next) => {
     // if (unprotectedRoutes.includes(req.path.split('/')[1])) {
-    const lastPathSegment = req.path.split('/')[2];
+    const lastPathSegment = req.path.split('/')[1];
     if (unprotectedRoutes.includes(lastPathSegment)) {
         return next();
     }
