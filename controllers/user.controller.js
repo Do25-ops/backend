@@ -34,15 +34,19 @@ module.exports.loginUser = (req, res) => {
                 { expiresIn: '3h' }
             );
             
+            const expirationDate = new Date(Date.now() + 4 * 60 * 60 * 1000); // 4 hours from now
+
             res.status(200)
-            .cookie("access_token", token, {
-              httpOnly: true,
-              secure: true,          // Ensures cookies are only sent over HTTPS
-              sameSite: "none",      // Required for cross-origin cookies
-              path: "/",             // Makes cookie available site-wide
-              maxAge: 4 * 60 * 60 * 1000 // 4 hours expiration in milliseconds
-            })
-            .json({ ...other });
+              .cookie("access_token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/",
+                maxAge: 4 * 60 * 60 * 1000,  // 4 hours in milliseconds
+                expires: expirationDate      // Explicit expiration date
+              })
+              .json({ ...other });
+            
           
         });
     }
