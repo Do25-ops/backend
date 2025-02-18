@@ -12,7 +12,8 @@ const server = http.createServer(app);
 
 
 app.use(cors({
-    origin: ['https://frontend-one-gamma-23.vercel.app'], 
+    // origin: ['https://frontend-one-gamma-23.vercel.app'], 
+    origin: ['https://odyssey.procom.com.pk'], 
     credentials: true, 
 }));
 
