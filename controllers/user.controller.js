@@ -34,9 +34,16 @@ module.exports.loginUser = (req, res) => {
                 { expiresIn: '3h' }
             );
             
-            res.status(200).cookie("access_token", token, {
-                httpOnly: true
-            }).json({...other});
+            res.status(200)
+            .cookie("access_token", token, {
+              httpOnly: true,
+              secure: true,          // Ensures cookies are only sent over HTTPS
+              sameSite: "none",      // Required for cross-origin cookies
+              path: "/",             // Makes cookie available site-wide
+              maxAge: 4 * 60 * 60 * 1000 // 4 hours expiration in milliseconds
+            })
+            .json({ ...other });
+          
         });
     }
     catch(err){
@@ -47,19 +54,19 @@ module.exports.loginUser = (req, res) => {
 
 module.exports.logoutUser = (req, res) => {
     try {
-        res.clearCookie("access_token", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict"
-        });
-
-        return res.status(200).json({ message: "Logged out successfully" });
+      res.cookie("access_token", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(0) // Expire the cookie immediately
+      });
+  
+      return res.status(200).send({ message: "Logged out successfully" });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+      return res.status(500).send({ message: err.message });
     }
-};
-
-
+  };
+  
 module.exports.registerUser = (req,res) => {
 
     try{
