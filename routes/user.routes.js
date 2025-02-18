@@ -8,5 +8,5 @@ router.get('/logout',logoutUser);
 router.get('/check-session',retrieveCookie);
 router.get('/getMyDashboard/:id',getDashboard);
 router.post('/tutorialDone',markTutorialDone);
-router.get('/checkLevel/:id',fetchLevel)
+router.get('/fetchTeamLevel/:id',fetchLevel)
 module.exports = router;
