@@ -55,14 +55,15 @@ module.exports.loginUser = (req, res) => {
 
 module.exports.logoutUser = (req, res) => {
     try {
-      res.status(200).cookie("access_token", "", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        expires: new Date(0) // Expire the cookie immediately
-      });
-  
-      return res.status(200).send({ message: "Logged out successfully" });
+        res.status(200)
+        .cookie("access_token", "", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",          // Ensure this matches the login cookie's path
+          expires: new Date(0) // Expire the cookie immediately
+        })
+        .json({ message: "Logged out successfully" });      
     } catch (err) {
       return res.status(500).send({ message: err.message });
     }
