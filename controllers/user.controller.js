@@ -95,13 +95,13 @@ module.exports.retrieveCookie = (req, res) => {
     const token = req.cookies.access_token;
     try{
         if (!token) {
-            return res.status(401).json({ message: 'Not authenticated' });
+            return res.status(200).json({ message: 'No session found to recover' });
     }
     
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         
         if (err || !decoded.id) {
-            return res.status(403).json({ message: 'Token expired or invalid' });
+            return res.status(200).json({ message: 'Token expired or invalid' });
         }
         
         const account_query = 'SELECT * FROM participants WHERE email = ?';

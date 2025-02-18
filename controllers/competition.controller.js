@@ -329,7 +329,7 @@ module.exports.fetchStatus = (req, res) => {
 
   try {
     const q = `
-        SELECT p.email, s.status FROM solutions s
+        SELECT p.email, s.status,p.level FROM solutions s
         JOIN participants p ON s.team_id = p.team_id
         WHERE s.team_id = ? AND s.queryId = ?
         ORDER BY s.submitted_at DESC
@@ -349,6 +349,7 @@ module.exports.fetchStatus = (req, res) => {
         queryStatus: {
           email: result[0].email,
           status: result[0].status,
+          level : result[0].level,
         },
       });
     });
