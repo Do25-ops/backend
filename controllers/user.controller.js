@@ -164,8 +164,12 @@ module.exports.deleteParticipants = (req,res) => {
 };
 
 module.exports.fetchLevel = (req,res) => {
+<<<<<<< HEAD
     const {team_id} = req.query;
     
+=======
+const team_id = req.params.id;
+>>>>>>> 8637c51ff2ee9a5ac4980cb37fad881a30f65dce
     try{
         const q = `select level from participants where team_id = ?`;
         db.query(q, [team_id], (err, result) => {
