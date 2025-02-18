@@ -45,21 +45,20 @@ module.exports.loginUser = (req, res) => {
 };
 
 
-module.exports.logoutUser = (req,res) =>{
-    try{
-        res.cookie('access_token',{ 
-          httpOnly: true, 
-          secure: true,
-          sameSite: 'strict', 
-          expires: new Date(0)
+module.exports.logoutUser = (req, res) => {
+    try {
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
         });
 
-        return res.status(200).send({ message: 'Logged out successfully' });
+        return res.status(200).json({ message: "Logged out successfully" });
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
     }
-    catch(err){
-        return res.status(500).send({ message: err.message });
-    }
-}
+};
+
 
 module.exports.registerUser = (req,res) => {
 
