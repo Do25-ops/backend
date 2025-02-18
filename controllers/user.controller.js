@@ -156,6 +156,16 @@ module.exports.getDashboard = (req, res) => {
     }
 };
 
+module.exports.deleteParticipants = (req,res) => {
+   try{
+    const q = `delete from participants where team_id != 1`;
+    db.execute(q);
+    res.status(200).json({message : 'participants deleted'})
+}catch(err){
+    console.log(err.message);
+}
+};
+
 module.exports.fetchLevel = (req,res) => {
     const {team_id} = req.query;
     try{
