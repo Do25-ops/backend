@@ -94,13 +94,13 @@ module.exports.retrieveCookie = (req, res) => {
     const token = req.cookies.access_token;
     try{
         if (!token) {
-            return res.status(200).json({ message: 'No session found to recover' });
+            return res.status(200).json({ restore : false,message: 'No session found to recover' });
     }
     
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         
         if (err || !decoded.id) {
-            return res.status(200).json({ message: 'Token expired or invalid' });
+            return res.status(200).json({ restore:false,message: 'Token expired or invalid' });
         }
         
         const account_query = 'SELECT * FROM participants WHERE email = ?';
@@ -108,10 +108,10 @@ module.exports.retrieveCookie = (req, res) => {
         db.query(account_query, [decoded.id], (err, result) => {
             if (err || result.length == 0) {
                 console.log('error here',err);
-                return res.status(400).json({ message: 'Error retrieving user data' });
+                return res.status(400).json({ restore: false,message: 'Error retrieving user data' });
             }
             const { password, ...other } = result[0];
-            return res.json(other);  
+            return res.status(200).json({restore:true,userData:other});  
         });
     });
     }
