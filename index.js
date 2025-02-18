@@ -12,7 +12,7 @@ const server = http.createServer(app);
 
 
 app.use(cors({
-    origin: ['http://localhost:5173'], 
+    origin: ['https://frontend-one-gamma-23.vercel.app'], 
     credentials: true, 
 }));
 
