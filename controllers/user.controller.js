@@ -157,9 +157,10 @@ module.exports.getDashboard = (req, res) => {
 };
 
 module.exports.fetchLevel = (req,res) => {
+    const {team_id} = req.query;
     try{
         const q = `select level from participants where team_id = ?`;
-        db.query(q, [req.params.id], (err, result) => {
+        db.query(q, [team_id], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(400).json([]);
