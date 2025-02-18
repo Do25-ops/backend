@@ -7,7 +7,7 @@ router.get('/queries/:id',sendQueries)
 router.get('/leaderboardData',sendLeaderboardData)
 router.post('/submitFile',submitQuery);
 router.get('/getSubmissionStatus',fetchStatus);
-router.get('/fetchTeamLevel/:id',fetchLevel)
+router.get('/fetchTeamLevel/:team_id',fetchLevel)
 
 
 module.exports = router;
