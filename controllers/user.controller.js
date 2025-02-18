@@ -55,7 +55,6 @@ module.exports.loginUser = (req, res) => {
     }
 };
 
-
 module.exports.logoutUser = (req, res) => {
     try {
       res.cookie("access_token", "", {
@@ -157,6 +156,21 @@ module.exports.getDashboard = (req, res) => {
     }
 };
 
+module.exports.fetchLevel = (req,res) => {
+    try{
+        const q = `select level from participants where team_id = ?`;
+        db.query(q, [req.params.id], (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.status(400).json([]);
+            }
+            res.status(200).json(result);
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json([]);
+    }
+}
 module.exports.markTutorialDone = (req,res) => {
     console.log(req.body);
     try{
