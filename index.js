@@ -12,7 +12,7 @@ const server = http.createServer(app);
 
 
 app.use(cors({
-    origin: ['https://frontend-one-gamma-23.vercel.app'], 
+    origin: ['http://localhost:5173'], 
     credentials: true, 
 }));
 
@@ -25,6 +25,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(cookieParser());
+app.use(authentication);
 
 //app.use(authentication);
 
@@ -37,21 +38,7 @@ app.get('/api', (req, res) => {
     res.send('Hunt Data with data dungeon!');
 });
 
-
-// io.on('connection', (socket) => {
-    
-  
-//     socket.on('updateFileStatus', (email, newStatus) => {
-//       console.log(`Team email: ${email}, New file Status: ${newStatus}`);
-//       io.emit('statusUpdated', { email, newStatus });
-//     });
-  
-//     socket.on('disconnect', () => {
-//     });
-// });
-  
 server.listen(PORT, () => {
-    console.log('connected at ',PORT);
     
 }).on('error', (err) => {
     if (err.code === 'EADDRINUSE') {

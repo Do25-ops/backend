@@ -253,13 +253,8 @@ GROUP BY q.queryId;
 
 function deepEqual(queryId, b, selectedDialect) {
   // console.log(queryId, b, oracleTabularAnswers[queryId]);
-  console.log(selectedDialect, '\n\n');
-  console.log(queryId,'\n\n');
-  console.log(b,'\n\n');
-  selectedDialect === 'oracle' && console.log('printing oracle answer ' ,oracleTabularAnswers[queryId],'\n\n');
-  console.log(tabularAnswers[queryId],'\n\n');
   try {
-    if(selectedDialect === 'oracle' && oracleTabularAnswers[queryId] === b) {console.log('comparing as oracle,') ;return true;}
+    if(selectedDialect === 'oracle' && oracleTabularAnswers[queryId] === b) return true;
     if (tabularAnswers[queryId] == b) return true;
     if(selectedDialect === 'oracle') return false;
     let parsedData = [];
@@ -431,7 +426,6 @@ function statusSender(email, id, team_id, query, answer, selectedDialect) {
                 const levels = Math.floor(result3[0].solved / 3);
 
                 if (levels > 0) {
-                  console.log("Setting level of team to", levels + 1, team_id);
                   const updateQuery = `
                     UPDATE participants 
                     SET level = ?, levelCrossedAt = NOW()

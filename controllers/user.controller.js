@@ -24,9 +24,7 @@ module.exports.loginUser = (req, res) => {
                 return res.status(400).json({message : 'Incorrect Password,Try again'});
             }
 
-            const { password, ...other } = user;
-            console.log('login ',user);
-            
+            const { password, ...other } = user;            
 
             const token = jwt.sign(
                 { id: user.email }, 
@@ -57,7 +55,7 @@ module.exports.loginUser = (req, res) => {
 
 module.exports.logoutUser = (req, res) => {
     try {
-      res.cookie("access_token", "", {
+      res.status(200).cookie("access_token", "", {
         httpOnly: true,
         secure: true,
         sameSite: "none",
@@ -132,7 +130,6 @@ module.exports.retrieveCookie = (req, res) => {
 
 
 module.exports.getDashboard = (req, res) => {
-    console.log('hit dashboard');
     try {
         const team_id = req.params.id;
         const q = `
@@ -168,6 +165,7 @@ module.exports.deleteParticipants = (req,res) => {
 
 module.exports.fetchLevel = (req,res) => {
     const {team_id} = req.query;
+    
     try{
         const q = `select level from participants where team_id = ?`;
         db.query(q, [team_id], (err, result) => {
@@ -183,7 +181,6 @@ module.exports.fetchLevel = (req,res) => {
     }
 }
 module.exports.markTutorialDone = (req,res) => {
-    console.log(req.body);
     try{
         const q = `update participants set firstLogin = false where team_id = ${req.body.team_id}`;
         db.execute(q);
