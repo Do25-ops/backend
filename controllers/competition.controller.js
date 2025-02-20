@@ -474,7 +474,6 @@ module.exports.sendLeaderboardData = (req, res) => {
     SELECT p.*,count(s.id) as num_submissions 
     FROM participants p
     left join solutions s on s.team_id = p.team_id
-    where s.status = 'rejected'
     group by p.team_id
     `;
     db.query(q, [], async (err, result1) => {
