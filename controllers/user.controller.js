@@ -52,7 +52,7 @@ module.exports.loginUser = (req, res) => {
         res.status(500).json({message:err.message})
     }
 };
-
+0
 module.exports.logoutUser = (req, res) => {
     try {
         res.status(200)

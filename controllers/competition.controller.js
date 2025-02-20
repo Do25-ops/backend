@@ -474,6 +474,7 @@ module.exports.sendLeaderboardData = (req, res) => {
     SELECT p.*,count(s.id) as num_submissions 
     FROM participants p
     left join solutions s on s.team_id = p.team_id
+    where s.status = 'rejected'
     group by p.team_id
     `;
     db.query(q, [], async (err, result1) => {
@@ -507,12 +508,16 @@ module.exports.sendLeaderboardData = (req, res) => {
           })
         );
 
-        finalResult.sort((a, b) => {
-          if (b.lastLevelPassed !== a.lastLevelPassed) {
-            return b.lastLevelPassed - a.lastLevelPassed; // Higher level first
-          }
-          return new Date(a.lastPassedTime) - new Date(b.lastPassedTime); // Earlier timestamp first
-        });
+       finalResult.sort((a, b) => {
+  if (b.lastLevelPassed !== a.lastLevelPassed) {
+    return b.lastLevelPassed - a.lastLevelPassed; // Higher level first
+  }
+  if (new Date(a.lastPassedTime) !== new Date(b.lastPassedTime)) {
+    return new Date(a.lastPassedTime) - new Date(b.lastPassedTime); // Earlier timestamp first
+  }
+  return a.submissions - b.submissions; // Lower number of submissions first
+});
+
 
         res.status(200).json({
           message: "Success",
