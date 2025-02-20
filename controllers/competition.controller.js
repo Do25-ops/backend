@@ -290,18 +290,21 @@ function deepEqual(queryId, b, selectedDialect) {
     }
 
 
-    let i = 0;
-    for (const row of answers[queryId]) {
-      const ele2 = JSON.stringify(row);
-      const ele1 = JSON.stringify(parsedData[i]);
-    
-      if (ele1 !== ele2) {
-        return false;
-      } 
-      i++;
-    }
+    let count = 0;
 
-    return true;
+    for (const row1 of parsedData) {
+      const ele1 = JSON.stringify(row1);
+    
+      for (const row2 of answers[queryId]) {
+        if (ele1 === JSON.stringify(row2)) {
+          count++;
+          break; 
+        }
+      }
+    }
+    
+    return count === parsedData.length && parsedData.length === answers[queryId].length;
+    
   } catch (err) {
     return false;
   }
