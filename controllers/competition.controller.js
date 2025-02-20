@@ -507,15 +507,23 @@ module.exports.sendLeaderboardData = (req, res) => {
           })
         );
 
-       finalResult.sort((a, b) => {
+     const competitionDate = "2024-02-19"; 
+
+finalResult.sort((a, b) => {
   if (b.lastLevelPassed !== a.lastLevelPassed) {
-    return b.lastLevelPassed - a.lastLevelPassed; // Higher level first
+    return b.lastLevelPassed - a.lastLevelPassed;
   }
-  if (new Date(a.lastPassedTime) !== new Date(b.lastPassedTime)) {
-    return new Date(a.lastPassedTime) - new Date(b.lastPassedTime); // Earlier timestamp first
+
+  const dateTimeA = new Date(`${competitionDate}T${a.lastPassedTime}`);
+  const dateTimeB = new Date(`${competitionDate}T${b.lastPassedTime}`);
+
+  if (dateTimeA.getTime() !== dateTimeB.getTime()) {
+    return dateTimeA - dateTimeB; 
   }
-  return a.submissions - b.submissions; // Lower number of submissions first
+
+  return a.submissions - b.submissions; 
 });
+
 
 
         res.status(200).json({
